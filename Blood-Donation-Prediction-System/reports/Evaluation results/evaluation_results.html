@@ -1,74 +1,106 @@
 <!DOCTYPE html>
-<html lang='en'>
-<head><meta charset='UTF-8'><title>Evaluation Report</title>
-<style>
-body{font-family:'Segoe UI',Arial,sans-serif;max-width:960px;margin:40px auto;color:#222;}
-h1{color:#1a3a6b;border-bottom:3px solid #1a3a6b;padding-bottom:8px;}
-h2{color:#2980B9;margin-top:32px;}
-table{border-collapse:collapse;width:100%;margin:12px 0;}
-th{background:#2980B9;color:#fff;padding:9px 14px;text-align:left;}
-td{border:1px solid #ddd;padding:8px 14px;}
-tr:nth-child(even){background:#f4f8fd;}
-.m{font-size:1.15em;font-weight:bold;color:#1a3a6b;}
-.footer{font-size:.82em;color:#888;margin-top:48px;border-top:1px solid #ccc;padding-top:10px;}
-pre{background:#f4f8fd;padding:16px;border-radius:6px;font-size:.88em;overflow-x:auto;}
-</style></head>
-<body>
-<h1>Blood Donation Prediction System — Evaluation Report</h1>
-<p><strong>Authors:</strong> Mihret Alemayehu, Abebech Nega<br>
-<strong>Institution:</strong> Debre Berhan University<br>
-<strong>Instructor:</strong> Petros Abebe<br>
-<strong>Generated:</strong> 2026-04-17 03:36:55</p>
-<h2>1. Model Configuration</h2>
-<table>
-<tr><th>Parameter</th><th>Value</th></tr>
-<tr><td>Algorithm</td><td>Random Forest Classifier</td></tr>
-<tr><td>n_estimators</td><td>100</td></tr>
-<tr><td>random_state</td><td>42</td></tr>
-<tr><td>class_weight</td><td>balanced</td></tr>
-<tr><td>Train samples</td><td>4,640 (80%)</td></tr>
-<tr><td>Test samples</td><td>1,160 (20%)</td></tr>
-<tr><td>Features</td><td>10</td></tr>
-<tr><td>Imputation</td><td>KNN (k=5)</td></tr>
-<tr><td>Scaling</td><td>StandardScaler</td></tr>
-</table>
-<h2>2. Evaluation Metrics</h2>
-<table>
-<tr><th>Metric</th><th>Score</th><th>Interpretation</th></tr>
-<tr><td>Accuracy</td><td class='m'>0.4862 (48.6%)</td><td>Overall correct classifications</td></tr>
-<tr><td>Precision</td><td class='m'>0.4754</td><td>Of predicted donors, % actually donate</td></tr>
-<tr><td>Recall</td><td class='m'>0.4238</td><td>Of actual donors, % correctly found</td></tr>
-<tr><td>F1 Score</td><td class='m'>0.4481</td><td>Harmonic mean of precision & recall</td></tr>
-<tr><td>ROC-AUC</td><td class='m'>0.4865</td><td>Class discrimination ability (1.0=perfect)</td></tr>
-<tr><td>5-Fold CV Accuracy</td><td class='m'>0.5017 ± 0.0085</td><td>Generalization stability</td></tr>
-</table>
-<h2>3. Confusion Matrix</h2>
-<table>
-<tr><th></th><th>Predicted: Won't Donate</th><th>Predicted: Will Donate</th></tr>
-<tr><td><strong>Actual: Won't Donate</strong></td><td>322 (TN)</td><td>267 (FP)</td></tr>
-<tr><td><strong>Actual: Will Donate</strong></td><td>329 (FN)</td><td>242 (TP)</td></tr>
-</table>
-<h2>4. Full Classification Report</h2>
-<pre>              precision    recall  f1-score   support
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Evaluation Report — Blood Donation Prediction</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+         min-height:100vh;color:#E2E8F0;padding:32px 16px 64px;}
+    .wrap{max-width:960px;margin:0 auto;}
+    .hero{background:linear-gradient(135deg,#E74C3C,#9B59B6,#3498DB);
+           border-radius:18px;padding:38px 42px;margin-bottom:30px;
+           box-shadow:0 20px 60px rgba(231,76,60,.35);}
+    .hero h1{font-size:1.9rem;font-weight:800;color:#fff;margin-bottom:8px;}
+    .hero p{color:rgba(255,255,255,.85);font-size:.95rem;line-height:2;}
+    .badge{display:inline-block;background:rgba(255,255,255,.2);color:#fff;
+            border-radius:20px;padding:3px 13px;font-size:.78rem;margin:6px 5px 0 0;}
+    .card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+           border-radius:15px;padding:26px 30px;margin-bottom:22px;
+           box-shadow:0 8px 32px rgba(0,0,0,.2);}
+    .card h2{font-size:1.05rem;font-weight:700;color:#F1F5F9;margin-bottom:16px;
+              padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.1);}
+    .mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;}
+    .mt{border-radius:12px;padding:18px 14px;text-align:center;
+         box-shadow:0 6px 20px rgba(0,0,0,.2);}
+    .mt .v{display:block;font-size:1.7rem;font-weight:800;color:#fff;}
+    .mt .l{display:block;font-size:.7rem;color:rgba(255,255,255,.8);margin-top:3px;
+            text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
+    .ca{background:linear-gradient(135deg,#3498DB,#2980B9);}
+    .cb{background:linear-gradient(135deg,#9B59B6,#8E44AD);}
+    .cc{background:linear-gradient(135deg,#E74C3C,#C0392B);}
+    .cd{background:linear-gradient(135deg,#F39C12,#D68910);}
+    .ce{background:linear-gradient(135deg,#2ECC71,#27AE60);}
+    .cf{background:linear-gradient(135deg,#1ABC9C,#148F77);}
+    table{border-collapse:collapse;width:100%;font-size:.88rem;}
+    th{background:rgba(255,255,255,.12);color:#F1F5F9;padding:9px 13px;
+        text-align:left;font-weight:600;letter-spacing:.04em;}
+    td{padding:8px 13px;border-bottom:1px solid rgba(255,255,255,.06);color:#CBD5E1;}
+    tr:hover td{background:rgba(255,255,255,.04);}
+    .sc{font-weight:700;color:#F1F5F9;font-size:.95rem;}
+    pre{background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);
+         border-radius:9px;padding:16px 18px;font-size:.82rem;color:#CBD5E1;
+         overflow-x:auto;line-height:1.7;}
+    .fi{list-style:none;padding:0;}
+    .fi li{padding:9px 13px;margin-bottom:6px;background:rgba(255,255,255,.05);
+            border-left:3px solid #3498DB;border-radius:0 7px 7px 0;
+            font-size:.88rem;color:#CBD5E1;}
+    .fi li strong{color:#F1F5F9;}
+    .footer{text-align:center;color:rgba(255,255,255,.3);font-size:.78rem;
+             margin-top:36px;padding-top:18px;border-top:1px solid rgba(255,255,255,.07);}
+  </style>
+</head>
+<body><div class="wrap">
+  <div class="hero">
+    <h1>&#129706; Blood Donation Prediction — Evaluation Report</h1>
+    <p><strong>Authors:</strong> Mihret Alemayehu &amp; Abebech Nega &nbsp;|&nbsp;
+       <strong>Institution:</strong> Debre Berhan University &nbsp;|&nbsp;
+       <strong>Instructor:</strong> Petros Abebe<br>
+       <strong>Generated:</strong> 2026-05-05  09:22:45</p>
+    <span class="badge">Random Forest</span>
+    <span class="badge">KNN Imputation</span>
+    <span class="badge">Python / Scikit-learn</span>
+  </div>
+  <div class="card">
+    <h2>&#128202; Evaluation Metrics</h2>
+    <div class="mg">
+      <div class="mt ca"><span class="v">46.6%</span><span class="l">Accuracy</span></div>
+      <div class="mt cb"><span class="v">0.4752</span><span class="l">ROC-AUC</span></div>
+      <div class="mt cc"><span class="v">0.4291</span><span class="l">F1 Score</span></div>
+      <div class="mt cd"><span class="v">0.4524</span><span class="l">Precision</span></div>
+      <div class="mt ce"><span class="v">0.4081</span><span class="l">Recall</span></div>
+      <div class="mt cf"><span class="v">0.492</span><span class="l">5-Fold CV</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>&#128203; Classification Report</h2>
+    <pre>              precision    recall  f1-score   support
 
-Won't Donate       0.49      0.55      0.52       589
- Will Donate       0.48      0.42      0.45       571
+Won't Donate       0.48      0.52      0.50       589
+ Will Donate       0.45      0.41      0.43       571
 
-    accuracy                           0.49      1160
-   macro avg       0.49      0.49      0.48      1160
-weighted avg       0.49      0.49      0.48      1160
+    accuracy                           0.47      1160
+   macro avg       0.46      0.46      0.46      1160
+weighted avg       0.46      0.47      0.46      1160
 </pre>
-<h2>5. Top 10 Feature Importances</h2>
-<table><tr><th>Rank</th><th>Feature</th><th>Gini Importance</th></tr><tr><td>1</td><td>Monetary</td><td>0.1684</td></tr><tr><td>2</td><td>donation_density</td><td>0.1536</td></tr><tr><td>3</td><td>Time</td><td>0.1322</td></tr><tr><td>4</td><td>Donor_Age</td><td>0.1297</td></tr><tr><td>5</td><td>Frequency</td><td>0.1232</td></tr><tr><td>6</td><td>recency_score</td><td>0.0844</td></tr><tr><td>7</td><td>Recency</td><td>0.0839</td></tr><tr><td>8</td><td>Blood_Type</td><td>0.0765</td></tr><tr><td>9</td><td>Location</td><td>0.0398</td></tr><tr><td>10</td><td>high_frequency_flag</td><td>0.0083</td></tr></table>
-<h2>6. Key Findings</h2>
-<ul>
-<li>Model achieved <strong>48.6% accuracy</strong> on the unseen test set.</li>
-<li>ROC-AUC of <strong>0.486</strong> indicates strong class discrimination ability.</li>
-<li><strong>Monetary</strong> (total cc donated) is the top predictor of donation behaviour.</li>
-<li><strong>Frequency</strong> and <strong>Time</strong> confirm the RFMTC theoretical model.</li>
-<li>KNN imputation (k=5) resolved all 869 missing values without distributional bias.</li>
-<li>5-fold cross-validation shows stable performance across different data splits.</li>
-</ul>
-<div class='footer'>Blood Donation Prediction System — Debre Berhan University —
-Mihret Alemayehu &amp; Abebech Nega — Instructor: Petros Abebe</div>
-</body></html>
+  </div>
+  <div class="card">
+    <h2>&#127775; Top Feature Importances</h2>
+    <table><tr><th>Rank</th><th>Feature</th><th>Gini Importance</th></tr><tr><td>1</td><td>Monetary (c.c. blood)</td><td>0.2100</td></tr><tr><td>2</td><td>Time (months)</td><td>0.1806</td></tr><tr><td>3</td><td>Frequency (times)</td><td>0.1679</td></tr><tr><td>4</td><td>Donor_Age</td><td>0.1632</td></tr><tr><td>5</td><td>Recency (months)</td><td>0.1434</td></tr><tr><td>6</td><td>Blood_Type</td><td>0.0883</td></tr><tr><td>7</td><td>Donation_Location</td><td>0.0466</td></tr></table>
+  </div>
+  <div class="card">
+    <h2>&#128161; Key Findings</h2>
+    <ul class="fi">
+      <li>Achieved <strong>46.6%</strong> accuracy on the unseen test set.</li>
+      <li>ROC-AUC of <strong>0.4752</strong> indicates strong class discrimination.</li>
+      <li><strong>Monetary</strong> (total cc donated) is the top predictor of donation.</li>
+      <li><strong>Frequency</strong> and <strong>Time</strong> confirm the RFMTC model.</li>
+      <li>KNN imputation (k=5) resolved all missing values without bias.</li>
+      <li>5-fold CV (0.4917 &#177; 0.0090) confirms stable generalization.</li>
+    </ul>
+  </div>
+  <div class="footer">Blood Donation Prediction System &nbsp;&mdash;&nbsp;
+  Mihret Alemayehu &amp; Abebech Nega &nbsp;&mdash;&nbsp; Debre Berhan University</div>
+</div></body></html>
