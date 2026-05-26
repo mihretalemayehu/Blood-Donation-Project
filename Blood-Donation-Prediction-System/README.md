@@ -1,8 +1,7 @@
 # Blood Donation Prediction System
 
 **Course Project | Debre Berhan University**  
-**Instructor:** Petros Abebe  
-**Developers:** Mihret Alemayehu, Abebech Nega
+**Instructor:** Petros Abebe 
 
 ---
 
@@ -155,7 +154,6 @@ Three derived features are computed from the RFMTC columns:
 
 ---
 
-## License
 
-This project is for academic purposes only.  
-© 2024 Mihret Alemayehu & Abebech Nega — Debre Berhan University
+
+
